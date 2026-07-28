@@ -45,6 +45,21 @@ terraform plan -var-file=envs/terraform.tfvars.dev
 terraform apply -var-file=envs/terraform.tfvars.dev
 ```
 
+## CI Security Scans
+
+Terraform changes are automatically scanned by **tfsec** and **checkov** in CI.
+
+### Regenerating the checkov baseline
+
+The `.checkov.baseline` file acknowledges pre-existing findings so CI only fails
+on new regressions. After fixing infrastructure security issues, regenerate it:
+
+```bash
+checkov -d infrastructure/terraform --framework terraform --create-baseline
+```
+
+Then commit the updated `.checkov.baseline` alongside the fix.
+
 ## Workspace Strategy
 
 Per-environment state isolation is handled by workspaces. Each environment
